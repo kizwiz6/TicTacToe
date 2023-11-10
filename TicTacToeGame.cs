@@ -16,6 +16,26 @@ namespace TicTacToe
             board = new char[3, 3];
         }
 
+        public string GetResult()
+        {
+            if (WinsTicTacToe(PlayerSymbol.X))
+            {
+                return "X wins";
+            }
+            else if (WinsTicTacToe(PlayerSymbol.O))
+            {
+                return "O wins";
+            }
+            else if (IsBoardFull())
+            {
+                return "Tie";
+            }
+            else
+            {
+                return "Game in progress";
+            }
+        }
+
         public void PlayGame()
         {
             do
@@ -23,23 +43,12 @@ namespace TicTacToe
                 ResetBoard();
                 TakeUserInput();
                 DisplayBoard();
+            } while (!HasWinner() && !IsBoardFull());
 
-                if (WinsTicTacToe(PlayerSymbol.X))
-                {
-                    Console.WriteLine("X wins");
-                }
-                else if (WinsTicTacToe(PlayerSymbol.O))
-                {
-                    Console.WriteLine("O wins");
-                }
-                else
-                {
-                    Console.WriteLine("Tie");
-                }
-            } while (PlayAgain());
+            Console.WriteLine(GetResult());
         }
 
-        private void ResetBoard()
+        public void ResetBoard()
         {
             // Initialize the board with empty spaces
             for (int i = 0; i < 3; i++)
@@ -51,7 +60,7 @@ namespace TicTacToe
             }
         }
 
-        private void TakeUserInput()
+        public void TakeUserInput()
         {
             bool validInput = false;
             int row = -1, col = -1; // Initialise with invalid values
@@ -79,20 +88,22 @@ namespace TicTacToe
                     Console.WriteLine("Invalid input format. Please enter row and column as two space-separated numbers.");
                 }
             } while (!validInput);
+
+
             // Update the board with the player's symbol
-            board[row, col] = GetPlayerSymbol(currentPlayer);
+            SetSymbol(GetPlayerSymbol(currentPlayer), row, col);
 
             // Switch to the other player for the next turn
             currentPlayer = (currentPlayer == PlayerSymbol.X) ? PlayerSymbol.O : PlayerSymbol.X;
 
         }
 
-        private char GetPlayerSymbol(PlayerSymbol player)
+        public char GetPlayerSymbol(PlayerSymbol player)
         {
             return (player == PlayerSymbol.X) ? 'X' : 'O';
         }
 
-        private void DisplayBoard()
+        public void DisplayBoard()
         {
             // Improved visualization of the game board
             for (int i = 0; i < 3; i++)
@@ -105,7 +116,7 @@ namespace TicTacToe
             }
         }
 
-        private bool WinsTicTacToe(PlayerSymbol symbol)
+        public bool WinsTicTacToe(PlayerSymbol symbol)
         {
             // Check rows and columns
             for (int i = 0; i < 3; i++)
@@ -145,7 +156,12 @@ namespace TicTacToe
 
         }
 
-        private bool HasWinner()
+        public void SetSymbol(char symbol, int row, int col)
+        {
+            board[row, col] = symbol;
+        }
+
+        public bool HasWinner()
         {
             // Check rows and columns
             for (int i = 0; i < 3; i++)
@@ -167,6 +183,23 @@ namespace TicTacToe
             }
 
             return false; // No winner
+        }
+
+        public bool IsBoardFull()
+        {
+            // Check if the board is full
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i, j] == ' ')
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private bool PlayAgain()
