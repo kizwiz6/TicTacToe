@@ -10,6 +10,12 @@
             {
                 string line = Console.ReadLine();
 
+                if (line.Length != 3)
+                {
+                    Console.WriteLine("Invalid input. Please enter exactly three characters");
+                    return;
+                }
+
                 board[i, 0] = line[0];
                 board[i, 1] = line[1];
                 board[i, 2] = line[2];
