@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace TicTacToe
 {
-    public class TicTacToeGame
+    /// <summary>
+    /// This class represents the logic of the tic-tac-toe game.
+    /// </summary>
+    public class TicTacToeGame : ITicTacToeGame
     {
         private char[,] board;
         private PlayerSymbol currentPlayer;
@@ -14,6 +17,18 @@ namespace TicTacToe
         public TicTacToeGame()
         {
             board = new char[3, 3];
+        }
+
+        public void PlayGame()
+        {
+            do
+            {
+                ResetBoard();
+                TakeUserInput();
+                DisplayBoard();
+            } while (!HasWinner() && !IsBoardFull());
+
+            Console.WriteLine(GetResult());
         }
 
         public string GetResult()
@@ -35,19 +50,6 @@ namespace TicTacToe
                 return "Game in progress";
             }
         }
-
-        public void PlayGame()
-        {
-            do
-            {
-                ResetBoard();
-                TakeUserInput();
-                DisplayBoard();
-            } while (!HasWinner() && !IsBoardFull());
-
-            Console.WriteLine(GetResult());
-        }
-
         public void ResetBoard()
         {
             // Initialize the board with empty spaces
@@ -96,11 +98,6 @@ namespace TicTacToe
             // Switch to the other player for the next turn
             currentPlayer = (currentPlayer == PlayerSymbol.X) ? PlayerSymbol.O : PlayerSymbol.X;
 
-        }
-
-        public char GetPlayerSymbol(PlayerSymbol player)
-        {
-            return (player == PlayerSymbol.X) ? 'X' : 'O';
         }
 
         public void DisplayBoard()
@@ -208,6 +205,20 @@ namespace TicTacToe
             string response = Console.ReadLine().ToLower();
             return response.ToLower() == "yes";
 
+        }
+
+        /// <summary>
+        /// This enum represents player symbols.
+        /// </summary>
+        public enum PlayerSymbol
+        {
+            X,
+            O
+        }
+
+        public char GetPlayerSymbol(PlayerSymbol player)
+        {
+            return (player == PlayerSymbol.X) ? 'X' : 'O';
         }
     }
 }
